@@ -156,3 +156,7 @@ public class Board { //Class to act as board for game
         System.out.println("Longest Road: " + longestRoadLength);
     }
 }
+
+public HashMap<Resource, Integer> getResources() {
+    return resources;
+}
