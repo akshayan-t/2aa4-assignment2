@@ -21,7 +21,7 @@ public class Gameplay { //Class for running gameflow
         this.players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4));
         this.turnController = new TurnController(board);
     }
-
+ 
     public Gameplay (int maxTurns, List<Player> players, Board board) { //Constructor for testing with customizable options
         this.board = board;
         this.maxTurns = maxTurns;
