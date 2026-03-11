@@ -1,5 +1,5 @@
 import java.io.FileWriter;
-import java.io.IOException; 
+import java.io.IOException;
 import java.util.List;
 
 public class JsonExporter {
@@ -78,11 +78,23 @@ public class JsonExporter {
     }
 
     private static String playerColourToJson(Player player) {
-        if (player == null || player.getColour() == null) {
-            return "UNKNOWN";
-        }
-        return player.getColour().name();
+    if (player == null || player.getColour() == null) {
+        return "WHITE";
     }
+
+    switch (player.getColour()) {
+        case RED:
+            return "RED";
+        case BLUE:
+            return "BLUE";
+        case ORANGE:
+            return "ORANGE";
+        case GREEN:
+            return "WHITE";
+        default:
+            return "WHITE";
+    }
+}
 
     private static String buildingTypeToJson(Building building) {
         if (building instanceof Settlement) {
@@ -93,4 +105,4 @@ public class JsonExporter {
         }
         return building.getClass().getSimpleName().toUpperCase();
     }
-} 
+}

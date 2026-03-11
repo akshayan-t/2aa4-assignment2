@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Demonstrator { //Main class
-    private ReadConfig readConfig = new ReadConfig(); 
+    private ReadConfig readConfig = new ReadConfig();
     private int turns = 0;
 
     public Demonstrator() {
