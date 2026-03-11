@@ -149,3 +149,7 @@ public class Player {
         System.out.println();
     }
 }
+
+public HashMap<Resource, Integer> getResources() {
+    return resources;
+}
