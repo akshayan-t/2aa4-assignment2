@@ -68,3 +68,7 @@ public class Node { //Node class
         return String.valueOf(number);
     }
 }
+
+public int getNodeId() {
+    return number;
+}
