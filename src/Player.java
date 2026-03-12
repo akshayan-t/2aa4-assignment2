@@ -31,6 +31,10 @@ public class Player {
         return controller;
     }
 
+    public PlayerColour getColour() {
+        return colour;
+    }
+
     public int getResources(Resource resource) {
         return resources.get(resource);
     } //Gets resources

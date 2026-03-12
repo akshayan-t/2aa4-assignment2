@@ -55,11 +55,13 @@ public class Gameplay { //Class for running gameflow
         turn = 1;
         board.setTurn(turn);
         roundOne(); //Round 1
+        JsonExporter.export(this, "state.json");
         printPoints(); //Prints points
         if (maxTurns > 1) {
             turn++;
             board.setTurn(turn);
             roundTwo(); //Round 2
+            JsonExporter.export(this, "state.json");
             printPoints();
         }
         if (maxTurns > 2) {
@@ -70,15 +72,18 @@ public class Gameplay { //Class for running gameflow
                     currentPlayer = player;
                     System.out.print("Round " + turn + " / ");
                     if (playRound(player)) { //Plays round, if player wins
+                        JsonExporter.export(this, "state.json");
                         System.out.println();
                         System.out.println("Player " + player.getPlayerNumber() + " wins!");
                         printResults(); //Print win message and results
                         return;
                     }
+                    JsonExporter.export(this, "state.json");
                 }
                 printPoints(); //Prints points after each round
             }
         }
+        JsonExporter.export(this, "state.json");
         printResults(); //Prints results if nobody wins
     }
 
