@@ -10,7 +10,7 @@ public class Demonstrator { //Main class
 
     public Demonstrator() {
         try {
-            turns = readConfig.readTurns();
+            turns = readConfig.readTurns(); //Gets turns from config
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NumberFormatException e) {

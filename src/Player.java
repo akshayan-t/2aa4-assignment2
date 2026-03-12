@@ -9,8 +9,8 @@ public class Player {
     private List<Node> cities = new ArrayList<>();
     private List<Road> roads = new ArrayList<>();
     private List<Building> buildings = new ArrayList<>();
-    private PlayerColour colour;
-    private PlayerTurnController controller;
+    private PlayerColour colour; //Player colour
+    private PlayerTurnController controller; //Turn controlled
 
     public Player(int playerNumber, Board board) { //Constructor
         this.playerNumber = playerNumber;
@@ -22,7 +22,7 @@ public class Player {
         controller = new BotTurnController();
     }
 
-    public Player (int playerNumber, Board board, PlayerColour colour) {
+    public Player (int playerNumber, Board board, PlayerColour colour) { //Constructor
         this(playerNumber, board);
         this.colour = colour;
     }
@@ -143,7 +143,7 @@ public class Player {
         }
     }
 
-    public void printCards(Board board) {
+    public void printCards(Board board) { //Prints resource cards
         System.out.print("Resource Cards: ");
         for (Resource resource: Resource.values()) {
             int value = this.getResources(resource);

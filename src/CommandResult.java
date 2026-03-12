@@ -1,4 +1,4 @@
-public class CommandResult {
+public class CommandResult { //Stores results of commands
     private boolean success;
     private boolean endsTurn;
     private String message;

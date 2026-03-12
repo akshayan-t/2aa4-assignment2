@@ -16,7 +16,7 @@ public class ListStatusCommand implements PlayerCommand {
 	public CommandResult execute(Gameplay game, TurnController turnController) {
 		Player player = game.getCurrentPlayer();
 		Board board = game.getBoard();
-		player.printCards(board);
+		player.printCards(board); //Prints resource cards
 		return new CommandResult(true, false, null);
 	}
 }

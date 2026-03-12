@@ -20,7 +20,7 @@ public class RollDiceCommand implements PlayerCommand {
 		Player player = game.getCurrentPlayer();
 		List<Player> players = game.getPlayers();
 		int number = turnController.rollDice();
-		turnController.makeResources(number, player, players);
+		turnController.makeResources(number, player, players); //Rolls dice, makes resources
 		return new CommandResult(true, false, null);
 	}
 }

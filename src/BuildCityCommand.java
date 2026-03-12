@@ -25,7 +25,7 @@ public class BuildCityCommand implements PlayerCommand {
 	public CommandResult execute(Gameplay game, TurnController turnController) {
 		Player player = game.getCurrentPlayer();
 		Board board = game.getBoard();
-		if (board.upgradeCity(player, nodeId)) {
+		if (board.upgradeCity(player, nodeId)) { //If city is built
 			System.out.print("Upgraded city at node " + nodeId);
 			return new CommandResult(true, false, null);
 		}

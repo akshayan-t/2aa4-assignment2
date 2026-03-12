@@ -2,10 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BotDecisionPolicy {
+public class BotDecisionPolicy { //Chooses command for computer
     private Random rand = new Random();
 
-    public PlayerCommand chooseNextCommand(Gameplay game, TurnController turnController) {
+    public PlayerCommand chooseNextCommand(Gameplay game, TurnController turnController) { //Chooses next command
         Board board = game.getBoard();
         Player player = game.getCurrentPlayer();
         List<Player> players = game.getPlayers();
@@ -16,7 +16,7 @@ public class BotDecisionPolicy {
             action = rand.nextInt(actions.size()); //Chooses random action
             return actions.get(action);
         }
-        return null;
+        return null; //Returns null if no actions available
     }
 
     private ArrayList<Node> getSettlementNodes(Player player, Board board) { //Gets settlement nodes from player

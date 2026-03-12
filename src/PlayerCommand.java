@@ -1,3 +1,3 @@
-public interface PlayerCommand {
-    public CommandResult execute(Gameplay game, TurnController turnController);
+public interface PlayerCommand { //Interface for Player commands
+    public CommandResult execute(Gameplay game, TurnController turnController); //Execute method
 }

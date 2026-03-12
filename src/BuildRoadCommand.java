@@ -29,7 +29,7 @@ public class BuildRoadCommand implements PlayerCommand {
 	public CommandResult execute(Gameplay game, TurnController turnController) {
 		Player player = game.getCurrentPlayer();
 		Board board = game.getBoard();
-		if (board.placeRoad(player, start, end)) {
+		if (board.placeRoad(player, start, end)) { //If road is built
 			System.out.print("Built road at (" + start + ", " + end + ")");
 			return new CommandResult(true, false, null);
 		}

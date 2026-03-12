@@ -2,15 +2,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ReadConfig {
+public class ReadConfig { //Reads config file
     public static int readTurns() throws IOException {
-        String filePath = "src/Config"; //Edit this to change file path
+        String filePath = "src/Config"; //Edit this to change file path if it gives a null parse error
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
-                // Match lines like: turns: int 20
-                if (line.toLowerCase().startsWith("turns: int")) {
+                if (line.toLowerCase().startsWith("turns: int")) { //If it matches format
                     String[] parts = line.split("\\s+");
                     if (parts.length >= 3) {
                         return Integer.parseInt(parts[2]);

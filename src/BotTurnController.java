@@ -6,26 +6,26 @@ public class BotTurnController extends PlayerTurnController {
     private Random rand = new Random();
     private BotDecisionPolicy botRules = new BotDecisionPolicy();
 
-    public void takeTurn(Gameplay game, TurnController turnController) {
+    public void takeTurn(Gameplay game, TurnController turnController) { //Runs turns after first 2 turns
         Player player = game.getCurrentPlayer();
         List<Player> players = game.getPlayers();
         turnController.makeResources(turnController.rollDice(), player, players); //Generates resources
-        game.setTurnPhase(TurnPhase.ROLLED);
+        game.setTurnPhase(TurnPhase.ROLLED); //Sets phase to rolled
 
         while (player.getTotalResources() > 7) { //If player has 7+ resources, checks available actions
-            if (game.isGameOver(player)) {
+            if (game.isGameOver(player)) { //Checks for win
                 return;
             }
-            PlayerCommand command = botRules.chooseNextCommand(game, turnController);
+            PlayerCommand command = botRules.chooseNextCommand(game, turnController); //Gets command
             if (command == null) {
                 break;
             }
             System.out.print(", ");
-            command.execute(game, turnController);
+            command.execute(game, turnController); //Executes command
         }
     }
 
-    public void takeStartTurn(Gameplay game, TurnController turnController) {
+    public void takeStartTurn(Gameplay game, TurnController turnController) { //Runs first 2 turns
         Board board = game.getBoard();
         Player player = game.getCurrentPlayer();
         int turn = game.getTurn();
@@ -59,7 +59,7 @@ public class BotTurnController extends PlayerTurnController {
             if (board.placeSettlement(player, node) == true) { //If player places settlement
                 for (Tile tile : board.getTiles()) {
                     if (tile.getNodes().contains(node) && tile.getResource() != null) {
-                        player.updateResources(tile.getResource(), 1, board);
+                        player.updateResources(tile.getResource(), 1, board); //Generates resources for settlement placed this round
                     }
                 }
                 while (true) {

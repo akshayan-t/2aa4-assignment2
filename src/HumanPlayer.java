@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class HumanPlayer extends Player {
-    private PlayerTurnController controller = new HumanTurnController();
+    private PlayerTurnController controller = new HumanTurnController(); //Sets controller to Human Turn Controller
 
     public HumanPlayer(int playerNumber, Board board) { //Constructor
         super(playerNumber, board);
@@ -9,7 +9,7 @@ public class HumanPlayer extends Player {
     public HumanPlayer(int playerNumber, Board board, PlayerColour colour) { //Constructor
         super(playerNumber, board, colour);
     }
-    public PlayerTurnController getController() {
+    public PlayerTurnController getController() { //Gets controller
         return controller;
     }
 }

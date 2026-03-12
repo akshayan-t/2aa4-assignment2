@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class DiceRoller {
+public class DiceRoller { //Class for rolling dice
     public DiceResult roll() {
         Random rand = new Random();
         int die1 = rand.nextInt(6 - 1 + 1) + 1; //Creates two dice from 1-6

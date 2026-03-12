@@ -25,7 +25,7 @@ public class BuildSettlementCommand implements PlayerCommand {
 	public CommandResult execute(Gameplay game, TurnController turnController) {
 		Player player = game.getCurrentPlayer();
 		Board board = game.getBoard();
-		if (board.placeSettlement(player, nodeId)) {
+		if (board.placeSettlement(player, nodeId)) { //If settlement is built
 			System.out.print("Built settlement at node " + nodeId);
 			return new CommandResult(true, false, null);
 		}
