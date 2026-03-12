@@ -10,6 +10,7 @@ public class BotTurnController extends PlayerTurnController {
         Player player = game.getCurrentPlayer();
         List<Player> players = game.getPlayers();
         turnController.makeResources(turnController.rollDice(), player, players); //Generates resources
+        game.setTurnPhase(TurnPhase.ROLLED);
 
         while (player.getTotalResources() > 7) { //If player has 7+ resources, checks available actions
             if (game.isGameOver(player)) {

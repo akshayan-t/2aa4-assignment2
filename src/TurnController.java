@@ -198,10 +198,9 @@ public class TurnController { //Class for performing actions during players turn
     }
 
     public int rollDice() { //Roll dice method
-        int die1 = rand.nextInt(6 - 1 + 1) + 1; //Creates two dice from 1-6
-        int die2 = rand.nextInt(6 - 1 + 1) + 1;
-        int number = die1 + die2; //Returns rolled number
-        return number;
+        DiceRoller roller = new DiceRoller();
+        DiceResult result = roller.roll();
+        return result.getSum();
     }
 
 }

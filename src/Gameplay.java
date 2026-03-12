@@ -11,6 +11,7 @@ public class Gameplay { //Class for running gameflow
     private int turn = 0; //Current turn
     private int maxTurns; //Max turns
     private TurnController turnController;
+    private TurnPhase phase;
 
     public Gameplay (int maxTurns) { //Constructor
         this.board = new Board();
@@ -87,6 +88,7 @@ public class Gameplay { //Class for running gameflow
 
     private void roundOne() { //First round
         for (Player player: players) { //For each player
+            phase = TurnPhase.ROLLED;
             currentPlayer = player;
             PlayerTurnController controller = player.getController();
             controller.takeStartTurn(this, turnController);
@@ -95,13 +97,16 @@ public class Gameplay { //Class for running gameflow
 
     private void roundTwo() { //Second round
         for (int i=players.size()-1;i>=0;i--) { //Players play in reverse order
+            phase = TurnPhase.ROLLED;
             currentPlayer = players.get(i);
             PlayerTurnController controller = players.get(i).getController();
             controller.takeStartTurn(this, turnController);
+            phase = TurnPhase.ENDED;
         }
     }
 
     private boolean playRound(Player player) { //Method for playing rounds
+        phase = TurnPhase.NOT_ROLLED;
         if (isGameOver(player)) {
             return true;
         }
@@ -112,6 +117,7 @@ public class Gameplay { //Class for running gameflow
         if (!(player instanceof HumanPlayer)) {
             System.out.println();
         }
+        phase = TurnPhase.ENDED;
         return isGameOver(player); //Checks if player wins
     }
 
@@ -136,5 +142,13 @@ public class Gameplay { //Class for running gameflow
             return true;
         }
         return false;
+    }
+
+    public TurnPhase getTurnPhase() {
+        return phase;
+    }
+
+    public void setTurnPhase(TurnPhase phase) {
+        this.phase = phase;
     }
 }

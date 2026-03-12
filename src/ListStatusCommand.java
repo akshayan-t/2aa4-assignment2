@@ -17,6 +17,6 @@ public class ListStatusCommand implements PlayerCommand {
 		Player player = game.getCurrentPlayer();
 		Board board = game.getBoard();
 		player.printCards(board);
-		return new CommandResult();
+		return new CommandResult(true, false, null);
 	}
 }

@@ -31,7 +31,7 @@ public class BuildRoadCommand implements PlayerCommand {
 		Board board = game.getBoard();
 		if (board.placeRoad(player, start, end)) {
 			System.out.print("Built road at (" + start + ", " + end + ")");
-			return new CommandResult();
+			return new CommandResult(true, false, null);
 		}
 		System.out.print("Build unsuccessful");
 		return null;

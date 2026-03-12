@@ -10,7 +10,7 @@ public class RegexTest {
     HumanCommandParser parser = new HumanCommandParser();
 
     @Test
-    public void testRoll() {
+    public void testRoll() { //Test 1
         String[] inputs = {"Roll"};
         String allInputs = String.join("\n", inputs);
         System.setIn(new ByteArrayInputStream(allInputs.getBytes()));
@@ -19,7 +19,7 @@ public class RegexTest {
     }
 
     @Test
-    public void testGo() {
+    public void testGo() { //Test 2
         String[] inputs = {"Go"};
         String allInputs = String.join("\n", inputs);
         System.setIn(new ByteArrayInputStream(allInputs.getBytes()));
@@ -28,7 +28,7 @@ public class RegexTest {
     }
 
     @Test
-    public void testList() {
+    public void testList() { //Test 3
         String[] inputs = {"List"};
         String allInputs = String.join("\n", inputs);
         System.setIn(new ByteArrayInputStream(allInputs.getBytes()));
@@ -37,7 +37,7 @@ public class RegexTest {
     }
 
     @Test
-    public void testBuildSettlement() {
+    public void testBuildSettlement() { //Test 4
         String[] inputs = {"Build settlement 5"};
         String allInputs = String.join("\n", inputs);
         System.setIn(new ByteArrayInputStream(allInputs.getBytes()));
@@ -46,7 +46,7 @@ public class RegexTest {
     }
 
     @Test
-    public void testBuildCity() {
+    public void testBuildCity() { //Test 5
         String[] inputs = {"Build city 5"};
         String allInputs = String.join("\n", inputs);
         System.setIn(new ByteArrayInputStream(allInputs.getBytes()));
@@ -55,7 +55,7 @@ public class RegexTest {
     }
 
     @Test
-    public void testBuildRoad() {
+    public void testBuildRoad() { //Test 6
         String[] inputs = {"Build road 0, 1"};
         String allInputs = String.join("\n", inputs);
         System.setIn(new ByteArrayInputStream(allInputs.getBytes()));
@@ -64,7 +64,7 @@ public class RegexTest {
     }
 
     @Test
-    public void testFails() {
+    public void testFails() { //Test 7
         String[] inputs = {"Aksjdfn", "ROLL", "gO", "Lisp", "Build settlement 24 5", "Build city 0, 4", "Build road 0 1", "Build road 0 1"};
         for (String input: inputs) {
             System.setIn(new ByteArrayInputStream(input.getBytes()));
@@ -73,7 +73,7 @@ public class RegexTest {
     }
 
     @Test
-    public void testEverything() {
+    public void testEverything() { //Test 8
         String[] inputs = {"Roll", "Go", "List", "Build settlement 5", "Build road 1, 2", "Build city 1"};
         String allInputs = String.join("\n", inputs);
         System.setIn(new ByteArrayInputStream(allInputs.getBytes()));

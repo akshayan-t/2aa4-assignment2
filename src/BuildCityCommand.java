@@ -27,7 +27,7 @@ public class BuildCityCommand implements PlayerCommand {
 		Board board = game.getBoard();
 		if (board.upgradeCity(player, nodeId)) {
 			System.out.print("Upgraded city at node " + nodeId);
-			return new CommandResult();
+			return new CommandResult(true, false, null);
 		}
 		System.out.print("Build unsuccessful");
 		return null;

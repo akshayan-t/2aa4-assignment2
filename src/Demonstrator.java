@@ -193,27 +193,6 @@ public class Demonstrator { //Main class
 //        main.testThree();
 //        main.testFour();
         main.playGame();
-//        main.testRobber();
-//        String[] inputs = {"Roll", "Go", "List", "Build settlement 5", "Build road 1, 2", "Build city 1"};
-//        String allInputs = String.join("\n", inputs);
-//        System.setIn(new ByteArrayInputStream(allInputs.getBytes()));
-//        String[] inputs = {"Roll", "Go", "List", "Build settlement 5", "Build road 1, 2", "Build city 1"};
-//        String regex = "^(?<command>Roll|Go|List|Build (?<building>settlement|city|road (?<fromNodeId>(\\d+,))?)? (?<nodeId>\\d+))?$";
-//        Pattern pattern = Pattern.compile(regex);
-//
-//        for (String input : inputs) {
-//            Matcher matcher = pattern.matcher(input);
-//            if (matcher.matches()) {
-//                if (matcher.group("building") == null) {
-//                    System.out.println("Roll");
-//                }
-//                String aaa[] = matcher.group("command").split(" ");
-//                System.out.println("Command: " + aaa[0]);
-//                System.out.println("Sub: " + matcher.group("building"));
-//                System.out.println("Args: " + matcher.group("nodeId"));
-//                System.out.println("Chunga: " + matcher.group("fromNodeId"));
-//                System.out.println("---");
-//            }
-//        }
+        main.testRobber();
     }
 }

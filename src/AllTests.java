@@ -6,6 +6,7 @@ import org.junit.runners.Suite;
     PlayerTest.class,
     PlacementRulesTest.class,
     BoardTest.class,
+        RegexTest.class
 })
 
 

@@ -21,6 +21,6 @@ public class RollDiceCommand implements PlayerCommand {
 		List<Player> players = game.getPlayers();
 		int number = turnController.rollDice();
 		turnController.makeResources(number, player, players);
-		return new CommandResult();
+		return new CommandResult(true, false, null);
 	}
 }

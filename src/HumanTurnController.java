@@ -5,7 +5,6 @@ public class HumanTurnController extends PlayerTurnController {
     private HumanCommandParser parser = new HumanCommandParser();
 
     public void takeTurn(Gameplay game, TurnController turnController) {
-        boolean rolled = false;
         Player player = game.getCurrentPlayer();
         System.out.println("Enter command: ");
         while (true) {
@@ -15,10 +14,10 @@ public class HumanTurnController extends PlayerTurnController {
             String line = input.readLine();
             PlayerCommand command = parser.parse(line);
             if (command != null) {
-                if (rolled == false) {
+                if (game.getTurnPhase().equals(TurnPhase.NOT_ROLLED)) {
                     if (command instanceof RollDiceCommand) {
                         command.execute(game, turnController);
-                        rolled = true;
+                        game.setTurnPhase(TurnPhase.ROLLED);
                     } else if (command instanceof ListStatusCommand){
                         command.execute(game, turnController);
                     } else {
