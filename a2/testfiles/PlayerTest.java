@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+RegexTestimport static org.junit.Assert.*;
 
 import org.junit.Test;
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class ReadConfig {
     public static int readTurns() throws IOException {
-        String filePath = "src/Config";
+        String filePath = "src/Config"; //Edit this to change file path
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {

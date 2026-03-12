@@ -192,7 +192,7 @@ public class Demonstrator { //Main class
 //        main.testTwo();
 //        main.testThree();
 //        main.testFour();
-        main.playGame();
-        main.testRobber();
+        main.playGame(); //Game initialized with 1 human player, 3 computer players
+        main.testRobber(); //Tests robber robbing someone
     }
 }
