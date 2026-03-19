@@ -3,6 +3,10 @@
 // --------------------------------------------------------
 
 /************************************************************/
+
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * 
  */
@@ -11,6 +15,9 @@ public class BuildSettlementCommand implements PlayerCommand {
 	 * 
 	 */
 	private int nodeId;
+	private Player player;
+	private HashMap<Player, HashMap<Resource, Integer>> previousPlayerResources = new HashMap<>();
+	private HashMap<Resource, Integer> previousBoardResources = new HashMap<>();
 
 	public BuildSettlementCommand(int nodeId) {
 		this.nodeId = nodeId;
@@ -25,11 +32,32 @@ public class BuildSettlementCommand implements PlayerCommand {
 	public CommandResult execute(Gameplay game, TurnController turnController) {
 		Player player = game.getCurrentPlayer();
 		Board board = game.getBoard();
+		List<Player> players = game.getPlayers();
+
+		for (Player p : players) {
+			previousPlayerResources.put(p, new HashMap<>(p.getResources()));
+		}
+		previousBoardResources = board.getResources();
+
 		if (board.placeSettlement(player, nodeId)) { //If settlement is built
+			this.player = player;
 			System.out.print("Built settlement at node " + nodeId);
 			return new CommandResult(true, false, null);
 		}
 		System.out.print("Build unsuccessful");
 		return null;
+	}
+
+	public void undo(Gameplay game, TurnController turnController) {
+		Board board = game.getBoard();
+		Node node = board.getNodes(nodeId);
+		board.undoBuild(player, node);
+
+		for (Player p : game.getPlayers()) {
+			HashMap<Resource, Integer> resources = previousPlayerResources.get(p); //Gets previous player's resources
+			p.setResources(resources); //Sets players resources as old resources
+		}
+		HashMap<Resource, Integer> boardResources = previousBoardResources;
+		board.setResources(boardResources);
 	}
 }

@@ -5,6 +5,7 @@ public class HumanTurnController extends PlayerTurnController {
     private HumanCommandParser parser = new HumanCommandParser();
 
     public void takeTurn(Gameplay game, TurnController turnController) { //Runs turns after first 2 turns
+        CommandManager commandManager = new CommandManager(game, turnController);
         Player player = game.getCurrentPlayer();
         System.out.println("Enter command: ");
         while (true) {
@@ -16,10 +17,10 @@ public class HumanTurnController extends PlayerTurnController {
             if (command != null) {
                 if (game.getTurnPhase().equals(TurnPhase.NOT_ROLLED)) { //If player hasn't rolled yet
                     if (command instanceof RollDiceCommand) { //Roll
-                        command.execute(game, turnController);
+                        commandManager.executeCommand(command);
                         game.setTurnPhase(TurnPhase.ROLLED); //Sets phase to rolled
                     } else if (command instanceof ListStatusCommand){ //List
-                        command.execute(game, turnController);
+                        commandManager.executeCommand(command);
                     } else {
                         System.out.print("Roll before continuing");
                     }
@@ -29,10 +30,23 @@ public class HumanTurnController extends PlayerTurnController {
                     } else if (command instanceof GoCommand) { //Go
                         break;
                     } else {
-                        command.execute(game, turnController); //Execute everything else
+                        commandManager.executeCommand(command); //Execute everything else
                     }
                 }
                 System.out.println();
+            }
+            else if (line.equals("Undo")) {
+                if (commandManager.undo() == true) {
+                    System.out.println("Command undone");
+                }
+                else {
+                    System.out.println("No commands to undo");
+                }
+            }
+            else if (line.equals("Redo")) {
+                if (commandManager.redo() == false) {
+                    System.out.println("No commands to redo");
+                }
             }
             else { //Usage String for incorrect input
                 System.out.println("Usage string: Roll|Go|List|[Build [settlement [nodeId] | city [nodeId] | road [fromNodeId, toNodeId]]]");
@@ -41,6 +55,7 @@ public class HumanTurnController extends PlayerTurnController {
     }
 
     public void takeStartTurn(Gameplay game, TurnController turnController) { //Runs first 2 turns
+        CommandManager commandManager = new CommandManager(game, turnController);
         int turn = game.getTurn();
         Player player = game.getCurrentPlayer();
         Board board =  game.getBoard();
@@ -66,20 +81,13 @@ public class HumanTurnController extends PlayerTurnController {
                     System.out.print("Can't roll during the first 2 turns");
                 }
                 else if (command instanceof ListStatusCommand){ //List
-                    command.execute(game, turnController);
+                    commandManager.executeCommand(command);;
                 }
                 else if (command instanceof BuildSettlementCommand) { //Build settlement yet
                     if (builtSettlement == false) { //If haven't build settlement
-                        if (command.execute(game, turnController) != null) { //Builds settlement
+                        if (commandManager.executeCommand(command) != null) { //Builds settlement
                             node = Integer.valueOf(lines[2]); //Gets node number
                             builtSettlement = true; //Sets settlement to true
-                            if (turn == 2) { //If second turn
-                                for (Tile tile : board.getTiles()) { //Generates resources for settlement
-                                    if (tile.getNodes().contains(board.getNodes()[node]) && tile.getResource() != null) {
-                                        player.updateResources(tile.getResource(), 1, board);
-                                    }
-                                }
-                            }
                         }
                     }
                     else System.out.print("Build unsuccessful");
@@ -89,7 +97,7 @@ public class HumanTurnController extends PlayerTurnController {
                         int start = Integer.valueOf(lines[2].replace(",", ""));
                         int end = Integer.valueOf(lines[3]);
                         if (node == start || node == end) {
-                            if (command.execute(game, turnController) != null) {
+                            if (commandManager.executeCommand(command) != null) {
                                 builtRoad = true;
                             }
                         }
@@ -98,11 +106,38 @@ public class HumanTurnController extends PlayerTurnController {
                     else System.out.print("Build unsuccessful");
                 }
                 else {
-                    command.execute(game, turnController); //Executes everything else
+                    commandManager.executeCommand(command); //Executes everything else
+                }
+            }
+            else if (line.equals("Undo")) {
+                if (commandManager.undo() == true) {
+                    System.out.print("Command undone");
+                    if (builtRoad == true) {
+                        builtRoad = false;
+                    }
+                    else if (builtSettlement == true) {
+                        builtSettlement = false;
+                    }
+                }
+                else {
+                    System.out.print("No commands to undo");
+                }
+            }
+            else if (line.equals("Redo")) {
+                if (commandManager.redo() == true) {
+                    if (builtSettlement == false) {
+                        builtSettlement = true;
+                    }
+                    else if (builtRoad == false) {
+                        builtRoad = true;
+                    }
+                }
+                else {
+                    System.out.print("No commands to redo");
                 }
             }
             else {
-                System.out.print("Usage string: Roll|Go|List|[Build [settlement [nodeId] | city [nodeId] | road [fromNodeId, toNodeId]]]");
+                System.out.print("Usage string: Undo|Redo|Roll|Go|List|[Build [settlement [nodeId] | city [nodeId] | road [fromNodeId, toNodeId]]]");
             }
             System.out.println();
         }

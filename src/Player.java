@@ -39,6 +39,14 @@ public class Player {
         return resources.get(resource);
     } //Gets resources
 
+    public HashMap<Resource, Integer> getResources() {
+        return resources;
+    } //Gets resources
+
+    public void setResources(HashMap<Resource, Integer> resources) {
+        this.resources = resources;
+    } //Gets resources
+
     public void updateResources(Resource resource, int change) { //Updates resources
         int amount = resources.get(resource);
         resources.put(resource, amount + change);
@@ -102,6 +110,16 @@ public class Player {
         if (getCities().contains(node)) { //Checks if cities has city before removing
             this.settlements.remove(node);
         }
+    }
+
+    public void removeBuilding(Node node) { //Removes settlement
+        this.settlements.remove(node);
+        this.cities.remove(node);
+        this.buildings.removeIf(building -> building.getLocation() == node);
+    }
+
+    public void removeBuilding(Node start, Node end) {
+        roads.removeIf(road -> (road.getStart().equals(start) && road.getEnd().equals(end)) || (road.getEnd().equals(start) && road.getStart().equals(end)));
     }
 
     public int calcPoints(List<Player> players, Board board) { //Calculates points

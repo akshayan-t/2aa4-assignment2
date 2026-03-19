@@ -15,6 +15,7 @@ public class BuildRoadCommand implements PlayerCommand {
 	 * 
 	 */
 	private int end;
+	private Player player;
 
 	public BuildRoadCommand(int start, int end) {
 		this.start = start;
@@ -30,10 +31,18 @@ public class BuildRoadCommand implements PlayerCommand {
 		Player player = game.getCurrentPlayer();
 		Board board = game.getBoard();
 		if (board.placeRoad(player, start, end)) { //If road is built
+			this.player = player;
 			System.out.print("Built road at (" + start + ", " + end + ")");
 			return new CommandResult(true, false, null);
 		}
 		System.out.print("Build unsuccessful");
 		return null;
+	}
+
+	public void undo(Gameplay game, TurnController turnController) {
+		Board board = game.getBoard();
+		Node start = board.getNodes(this.start);
+		Node end = board.getNodes(this.end);
+		board.undoBuild(player, start, end);
 	}
 }

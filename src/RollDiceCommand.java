@@ -4,12 +4,16 @@
 
 /************************************************************/
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * 
  */
 public class RollDiceCommand implements PlayerCommand {
+	private int number = -1;
+	private HashMap<Player, HashMap<Resource, Integer>> previousPlayerResources = new HashMap<>();
+	private HashMap<Resource, Integer> previousBoardResources = new HashMap<>();
 	/**
 	 * 
 	 * @param game 
@@ -19,8 +23,38 @@ public class RollDiceCommand implements PlayerCommand {
 	public CommandResult execute(Gameplay game, TurnController turnController) {
 		Player player = game.getCurrentPlayer();
 		List<Player> players = game.getPlayers();
+		Board board = game.getBoard();
+		if (number != -1) {
+			undo(game, turnController);
+			return new CommandResult(true, false, null);
+		}
+		for (Player p : players) {
+			previousPlayerResources.put(p, new HashMap<>(p.getResources()));
+		}
+		previousBoardResources = board.getResources();
+
 		int number = turnController.rollDice();
+		this.number = number;
 		turnController.makeResources(number, player, players); //Rolls dice, makes resources
 		return new CommandResult(true, false, null);
+	}
+
+	public void undo(Gameplay game, TurnController turnController) {
+		Board board = game.getBoard();
+		for (Player p : game.getPlayers()) {
+			HashMap<Resource, Integer> resources = previousPlayerResources.get(p); //Gets previous player's resources
+			previousPlayerResources.put(p, p.getResources()); //Replaces previous resources with new resources
+			p.setResources(resources); //Sets players resources as old resources
+		}
+		HashMap<Resource, Integer> boardResources = previousBoardResources;
+		previousBoardResources = board.getResources();
+		board.setResources(boardResources);
+		if (game.getTurnPhase() == TurnPhase.ROLLED) {
+			game.setTurnPhase(TurnPhase.NOT_ROLLED);
+		}
+		else {
+			System.out.print("Rolled " + number);
+			game.setTurnPhase(TurnPhase.ROLLED);
+		}
 	}
 }

@@ -52,6 +52,10 @@ public class Board { //Class to act as board for game
         roads.add(road);
     } //Setter
 
+    public void removeRoad(Node start, Node end) {
+        roads.removeIf(road -> (road.getStart().equals(start) && road.getEnd().equals(end)) || (road.getEnd().equals(start) && road.getStart().equals(end)));
+    }
+
     public void updateResources(Resource resource, int change) { //Updates resources
         int amount = resources.get(resource); //Current amount
         resources.put(resource, amount + change); //Puts amount + change in resources
@@ -59,6 +63,14 @@ public class Board { //Class to act as board for game
 
     public int getResources(Resource resource) {
         return resources.get(resource);
+    } //Getter
+
+    public HashMap<Resource, Integer> getResources() {
+        return resources;
+    } //Getter
+
+    public void setResources(HashMap<Resource, Integer> resources) {
+        this.resources = resources;
     } //Getter
 
     public boolean checkResources(Resource resource, int change) { //Checks if resources would be 0 or greater if changed
@@ -105,6 +117,14 @@ public class Board { //Class to act as board for game
         }
         return false;
 
+    }
+
+    public void undoBuild(Player player, Node node) {
+        turnController.handleUndoBuild(player, node, turn);
+    }
+
+    public void undoBuild(Player player, Node start, Node end) {
+        turnController.handleUndoBuild(player, start, end, turn);
     }
 
     public void setTurn(int turn) { //Setter

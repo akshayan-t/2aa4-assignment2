@@ -178,13 +178,23 @@ public class Demonstrator { //Main class
         board.printResources();
     }
 
-//    public void assignmentOneTests() {
-//        main.testOne();
-//        main.testTwo();
-//        main.testThree();
-//        main.testFour();
-//        main.playGame();
-//    }
+    public void testUndo() {
+        System.out.println("Test One");
+        Board board = new Board(); //Makes new board
+        Player player1 = new HumanPlayer(1, board); //Makes player for testing
+
+        List<Player> players = new ArrayList<>(Arrays.asList(player1));
+
+        player1.updateResources(Resource.WOOD, 100); //Maxes player's resources
+        player1.updateResources(Resource.BRICK, 100);
+        player1.updateResources(Resource.WHEAT, 100);
+        player1.updateResources(Resource.SHEEP, 100);
+        player1.updateResources(Resource.ORE, 100);
+
+        Gameplay play = new Gameplay(turns, players, board); //Creates testable gameflow
+        play.runGame(); //Since player1 has > 7 resources, it will do at least one action every turn
+        player1.printBuildings(); //Prints final buildings
+    }
 
     public static void main(String[] args) { //Main method for testing
         Demonstrator main = new Demonstrator();
@@ -192,7 +202,8 @@ public class Demonstrator { //Main class
 //        main.testTwo();
 //        main.testThree();
 //        main.testFour();
-        main.playGame(); //Game initialized with 1 human player, 3 computer players
-        main.testRobber(); //Tests robber robbing someone
+//        main.playGame(); //Game initialized with 1 human player, 3 computer players
+//        main.testRobber(); //Tests robber robbing someone
+        main.testUndo();
     }
 }

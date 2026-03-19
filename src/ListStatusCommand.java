@@ -19,4 +19,6 @@ public class ListStatusCommand implements PlayerCommand {
 		player.printCards(board); //Prints resource cards
 		return new CommandResult(true, false, null);
 	}
+
+	public void undo(Gameplay game, TurnController turnController) {}
 }

@@ -40,6 +40,10 @@ public class Node { //Node class
         this.roads.add(road);
     } //Adds road to list
 
+    public void removeRoad(Road road) { //Adds road to list
+        this.roads.remove(road);
+    } //Adds road to list
+
     public boolean checkRoadOwner(Player player) { //Checks if player owns a road connected to this node
         for (Road road : this.roads) {
             if (road.getOwner() == player) {

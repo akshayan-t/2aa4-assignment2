@@ -13,8 +13,13 @@ public class TurnController { //Class for performing actions during players turn
 
     public void exchangeResources(Player player, Buildable build) {
         for (Resource resource : build.getCost().keySet()) {
-            player.updateResources(resource, -1, board);
-//            board.updateResources(resource, 1);
+            player.updateResources(resource, -build.getCost().get(resource), board);
+        }
+    }
+
+    public void undoExchangeResources(Player player, Buildable build) {
+        for (Resource resource : build.getCost().keySet()) {
+            player.updateResources(resource, build.getCost().get(resource), board);
         }
     }
 
@@ -34,7 +39,14 @@ public class TurnController { //Class for performing actions during players turn
         node.setBuilding(settlement); //Set node's building to settlement
         node.setOwner(player); //Sets nodes owner to player
 
-        if (turn > 2) { //If turn > 2 update resources
+        if (turn == 2) { //If second turn
+            for (Tile tile : board.getTiles()) { //Generates resources for settlement
+                if (tile.getNodes().contains(node) && tile.getResource() != null) {
+                    player.updateResources(tile.getResource(), 1, board);
+                }
+            }
+        }
+        else if (turn > 2) { //If turn > 2 update resources
             exchangeResources(player, settlement);
         }
         return true;
@@ -193,6 +205,42 @@ public class TurnController { //Class for performing actions during players turn
         }
     }
 
+    public void undoMakeResources(int number, Player player, List<Player> players) {
+        int total;
+        Player owner1 = null;
+        Player owner2 = null;
+        switch (number) {
+            case 6:
+                owner1 = board.getTiles()[8].getOwner(); //If both tiles make same resource
+                owner2 = board.getTiles()[10].getOwner(); //Gets tiles owners
+                total = board.getTiles()[8].getResourcesProduced() + board.getTiles()[10].getResourcesProduced(); //Checks if total would overflow
+                if (board.checkResources(Resource.ORE, -total) || (owner1 == owner2) || owner1 == null || owner2 == null) { //If tiles have same owner or none
+                    board.getTiles()[8].makeResources(board); //ore
+                    board.getTiles()[10].makeResources(board); //ore
+                }
+                break;
+            case 7: //desert, no resources produced
+                activateRobber(player, players);
+                break;
+            case 8:
+                owner1 = board.getTiles()[2].getOwner();
+                owner2 = board.getTiles()[14].getOwner();
+                total = board.getTiles()[2].getResourcesProduced() + board.getTiles()[14].getResourcesProduced();
+                if (board.checkResources(Resource.BRICK, -total) || (owner1 == owner2) || owner1 == null || owner2 == null) {
+                    board.getTiles()[2].makeResources(board); //brick
+                    board.getTiles()[14].makeResources(board); //brick
+                }
+                total = 0;
+                break;
+            default:
+                for (Tile tile : board.getTiles()) { //Produces resources for each tile that matches number
+                    if (number == tile.getNumber()) {
+                        tile.makeResources(board);
+                    }
+                }
+        }
+    }
+
     public void activateRobber(Player player, List<Player> players) {
         robberController.activateRobber(player, players, board);
     }
@@ -201,6 +249,44 @@ public class TurnController { //Class for performing actions during players turn
         DiceRoller roller = new DiceRoller();
         DiceResult result = roller.roll();
         return result.getSum();
+    }
+
+    public boolean handleUndoBuild(Player player, Node node, int turn) { //Building settlements
+        Building building = node.getBuilding();
+        player.removeBuilding(node); //Add settlement location to player
+        node.setBuilding(null); //Set node's building to settlement
+        node.setOwner(null); //Sets nodes owner to player
+
+        if (building instanceof City) {
+            Settlement settlement = new Settlement(player, node); //Create new settlement
+            player.addSettlement(node); //Add settlement location to player
+            player.addBuilding(settlement); //Add Settlement to player's buildings
+            node.setBuilding(settlement); //Set node's building to settlement
+            node.setOwner(player); //Sets nodes owner to player
+        }
+
+        if (turn > 2) { //If turn > 2 update resources
+            undoExchangeResources(player, building);
+        }
+        return true;
+    }
+
+    public boolean handleUndoBuild(Player player, Node start, Node end, int turn) { //Builds road
+        Road r = null;
+        for (Road road: start.getRoads()) {
+            if ((road.getStart().equals(start) && road.getEnd().equals(end)) || (road.getEnd().equals(start) && road.getStart().equals(end))) {
+                r = road;
+            }
+        }
+        start.removeRoad(r); //Add road to nodes
+        end.removeRoad(r);
+        player.removeBuilding(start, end); //Add road to player and board
+        board.removeRoad(start, end);
+
+        if (turn > 2) { //If turn > 2, update resources
+            undoExchangeResources(player, r);
+        }
+        return true;
     }
 
 }

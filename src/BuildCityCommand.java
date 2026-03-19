@@ -11,6 +11,7 @@ public class BuildCityCommand implements PlayerCommand {
 	 * 
 	 */
 	private int nodeId;
+	private Player player;
 
 	public BuildCityCommand(int nodeId) {
 		this.nodeId = nodeId;
@@ -26,10 +27,17 @@ public class BuildCityCommand implements PlayerCommand {
 		Player player = game.getCurrentPlayer();
 		Board board = game.getBoard();
 		if (board.upgradeCity(player, nodeId)) { //If city is built
+			this.player = player;
 			System.out.print("Upgraded city at node " + nodeId);
 			return new CommandResult(true, false, null);
 		}
 		System.out.print("Build unsuccessful");
 		return null;
+	}
+
+	public void undo(Gameplay game, TurnController turnController) {
+		Board board = game.getBoard();
+		Node node = board.getNodes(nodeId);
+		board.undoBuild(player, node);
 	}
 }

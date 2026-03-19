@@ -16,4 +16,6 @@ public class GoCommand implements PlayerCommand {
 	public CommandResult execute(Gameplay game, TurnController turnController) {
 		return new CommandResult(true, true, null); //Returns CommandResult, indicating success
 	}
+
+	public void undo(Gameplay game, TurnController turnController) {}
 }
