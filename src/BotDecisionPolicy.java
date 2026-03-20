@@ -1,14 +1,33 @@
+/*
+R3.3 Constraint Implementation Summary:
+
+Constraint 1:
+- If player has >7 resources, choose highest-cost legal action to spend resources.
+- Verified through gameplay runs (triggered multiple times).
+
+Constraint 2:
+- Detects when two road segments are within two units and prioritizes connecting road.
+- Verified using a controlled test (Constraint2Test).
+
+Constraint 3:
+- If another player’s longest road is at most one less than current player,
+  bot prioritizes building a connected road.
+- Verified using a controlled test (Constraint3Test).
+
+Constraints are evaluated in priority order before R3.2 scoring.
+*/
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class BotDecisionPolicy { //Chooses command for computer
+public class BotDecisionPolicy {
     private Random rand = new Random();
     private BenefitScoringStrategy strategy = new BenefitScoringStrategy();
 
-    public PlayerCommand chooseNextCommand(Gameplay game, TurnController turnController, CommandManager commandManager) { //Chooses next command
+    public PlayerCommand chooseNextCommand(Gameplay game, TurnController turnController, CommandManager commandManager) {
         Board board = game.getBoard();
         Player player = game.getCurrentPlayer();
 
@@ -18,13 +37,13 @@ public class BotDecisionPolicy { //Chooses command for computer
             return null;
         }
 
-        // R3.3: constraints must be resolved before value-based actions
+        // R3.3 constraints (priority)
         PlayerCommand constraintCommand = chooseConstraintCommand(game, turnController, legalActions);
         if (constraintCommand != null) {
             return constraintCommand;
         }
 
-        // R3.2: evaluate benefit of each legal action
+        // R3.2 scoring fallback
         PlayerCommand bestMove = null;
         double maxVal = -1.0;
         List<PlayerCommand> tiedMoves = new ArrayList<>();
@@ -46,7 +65,7 @@ public class BotDecisionPolicy { //Chooses command for computer
             return tiedMoves.get(rand.nextInt(tiedMoves.size()));
         }
 
-        return bestMove; //Returns null if no actions available
+        return bestMove;
     }
 
     private PlayerCommand chooseConstraintCommand(Gameplay game, TurnController turnController, List<PlayerCommand> legalActions) {
@@ -54,7 +73,7 @@ public class BotDecisionPolicy { //Chooses command for computer
         Board board = game.getBoard();
         List<Player> players = game.getPlayers();
 
-        // R3.3.1: If there are more than 7 cards, the agent must spend them
+        // Constraint 1: spend resources if > 7
         if (player.getTotalResources() > 7) {
             PlayerCommand spendingAction = chooseBestSpendingAction(legalActions);
             if (spendingAction != null) {
@@ -62,15 +81,13 @@ public class BotDecisionPolicy { //Chooses command for computer
             }
         }
 
-        // R3.3.2: If there exist two road segments that are maximum two units away,
-        // the agent should try to buy roads to connect the segments
+        // Constraint 2: connect nearby road segments
         BuildRoadCommand connectingRoad = findRoadConnectingSegments(player, board, legalActions);
         if (connectingRoad != null) {
             return connectingRoad;
         }
 
-        // R3.3.3: If other players have a longest road that is at most one road shorter
-        // than the agent's, the agent should buy a connected road segment
+        // Constraint 3: extend road if longest road is threatened
         if (isLongestRoadThreatened(player, players, turnController)) {
             BuildRoadCommand extensionRoad = findAnyLegalRoad(legalActions);
             if (extensionRoad != null) {
@@ -117,13 +134,10 @@ public class BotDecisionPolicy { //Chooses command for computer
         boolean startTouchesOwnedRoad = start.checkRoadOwner(player);
         boolean endTouchesOwnedRoad = end.checkRoadOwner(player);
 
-        // Connects two existing parts of the player's road network
         if (startTouchesOwnedRoad && endTouchesOwnedRoad) {
             return true;
         }
 
-        // Approximates "maximum two units away":
-        // one endpoint touches owned road, the other is one node away from owned road
         if (startTouchesOwnedRoad && isOneStepFromOwnedRoad(player, board, end, start.getNumber())) {
             return true;
         }
@@ -160,8 +174,6 @@ public class BotDecisionPolicy { //Chooses command for computer
 
             int otherLongestRoad = turnController.calcLongestRoad(other);
 
-            // "other players have a longest road that is at most one road shorter"
-            // Example: player has 7, other has 6 -> build road
             if (otherLongestRoad >= playerLongestRoad - 1) {
                 return true;
             }
@@ -179,7 +191,7 @@ public class BotDecisionPolicy { //Chooses command for computer
         return null;
     }
 
-    private ArrayList<Node> getSettlementNodes(Player player) { //Gets settlement nodes from player
+    private ArrayList<Node> getSettlementNodes(Player player) {
         ArrayList<Node> nodes = new ArrayList<>();
         for (Node node : player.getSettlements()) {
             nodes.add(node);
@@ -187,7 +199,7 @@ public class BotDecisionPolicy { //Chooses command for computer
         return nodes;
     }
 
-    private ArrayList<Node> getRoadNodes(Player player) { //Gets all unique road nodes from player
+    private ArrayList<Node> getRoadNodes(Player player) {
         ArrayList<Node> nodes = new ArrayList<>();
         Set<Integer> seen = new HashSet<>();
 
