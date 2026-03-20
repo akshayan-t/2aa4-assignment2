@@ -25,6 +25,7 @@ public class BuildRoadCommand implements PlayerCommand {
 		this.start = start;
 		this.end = end;
 	}
+
 	/**
 	 * 
 	 * @param game 
@@ -53,6 +54,16 @@ public class BuildRoadCommand implements PlayerCommand {
 	public int getCost() {
 		return cost;
 	}
+
+	// --- Added getters for R3.3 ---
+	public int getStart() {
+		return start;
+	}
+
+	public int getEnd() {
+		return end;
+	}
+	// -----------------------------
 
 	public boolean leadsToVictoryPoint(Gameplay game, TurnController turnController) {
 		Player player = game.getCurrentPlayer();
