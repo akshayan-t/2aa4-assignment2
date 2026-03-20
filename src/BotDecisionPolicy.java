@@ -89,7 +89,7 @@ public class BotDecisionPolicy {
 
         // Constraint 3: extend road if longest road is threatened
         if (isLongestRoadThreatened(player, players, turnController)) {
-            BuildRoadCommand extensionRoad = findAnyLegalRoad(legalActions);
+            BuildRoadCommand extensionRoad = findAnyLegalRoad(legalActions, game, turnController);
             if (extensionRoad != null) {
                 return extensionRoad;
             }
@@ -182,13 +182,17 @@ public class BotDecisionPolicy {
         return false;
     }
 
-    private BuildRoadCommand findAnyLegalRoad(List<PlayerCommand> legalActions) {
+    private BuildRoadCommand findAnyLegalRoad(List<PlayerCommand> legalActions, Gameplay game, TurnController turnController) {
+        BuildRoadCommand roadCmd = null;
         for (PlayerCommand cmd : legalActions) {
             if (cmd instanceof BuildRoadCommand) {
-                return (BuildRoadCommand) cmd;
+                roadCmd = (BuildRoadCommand) cmd;
+                if (roadCmd.extendsLongestRoad(game, turnController)) {
+                    return roadCmd;
+                }
             }
         }
-        return null;
+        return roadCmd;
     }
 
     private ArrayList<Node> getSettlementNodes(Player player) {

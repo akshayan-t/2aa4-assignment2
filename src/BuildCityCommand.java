@@ -12,10 +12,11 @@ public class BuildCityCommand implements PlayerCommand {
 	 */
 	private int nodeId;
 	private Player player;
-	private int cost = 5;
+	private int cost;
 
 	public BuildCityCommand(int nodeId) {
 		this.nodeId = nodeId;
+		this.cost = 5;
 	}
 
 	/**

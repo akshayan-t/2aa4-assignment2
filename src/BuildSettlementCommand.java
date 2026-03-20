@@ -18,10 +18,11 @@ public class BuildSettlementCommand implements PlayerCommand {
 	private Player player;
 	private HashMap<Player, HashMap<Resource, Integer>> previousPlayerResources = new HashMap<>();
 	private HashMap<Resource, Integer> previousBoardResources = new HashMap<>();
-	private int cost = 4;
+	private int cost;
 
 	public BuildSettlementCommand(int nodeId) {
 		this.nodeId = nodeId;
+		this.cost = 4;
 	}
 
 	/**

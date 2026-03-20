@@ -19,11 +19,12 @@ public class BuildRoadCommand implements PlayerCommand {
 	 */
 	private int end;
 	private Player player;
-	private int cost = 2;
+	private int cost;
 
 	public BuildRoadCommand(int start, int end) {
 		this.start = start;
 		this.end = end;
+		this.cost = 2;
 	}
 
 	/**
@@ -78,5 +79,19 @@ public class BuildRoadCommand implements PlayerCommand {
 		board.undoBuild(player, start, end);
 
 		return oldPoints < newPoints;
+	}
+
+	public boolean extendsLongestRoad(Gameplay game, TurnController turnController) {
+		Player player = game.getCurrentPlayer();
+		Board board = game.getBoard();
+		Node start = board.getNodes(this.start);
+		Node end = board.getNodes(this.end);
+
+		int oldLength = turnController.calcLongestRoad(player);
+		board.placeRoad(player, start, end);
+		int newLength = turnController.calcLongestRoad(player);
+		board.undoBuild(player, start, end);
+
+		return oldLength < newLength;
 	}
 }
