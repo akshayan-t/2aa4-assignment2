@@ -217,7 +217,6 @@ public class BotDecisionPolicy {
                 seen.add(road.getEnd().getNumber());
             }
         }
-
         return nodes;
     }
 }
